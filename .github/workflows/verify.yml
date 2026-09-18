@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup sops + age (no login/auth step of any kind)
-        uses: sm-steel/setup-sops-age@675b80fa59ff1d9b8bfe5e7a3ed42bdecdc39903 # v0.1.0
+        uses: sm-steel/setup-sops-age@27140412e7c2dafef7736ef652a9bea55eabbde9 # v0.1.1
 
       - name: "Confirm sops/age/age-keygen are on PATH in a plain run step"
         run: |
