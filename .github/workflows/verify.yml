@@ -21,7 +21,7 @@ jobs:
       - name: Setup sops + age (no login/auth step of any kind)
         uses: sm-steel/setup-sops-age@675b80fa59ff1d9b8bfe5e7a3ed42bdecdc39903 # v0.1.0
 
-      - name: Confirm sops/age/age-keygen are on PATH in a plain run: step
+      - name: "Confirm sops/age/age-keygen are on PATH in a plain run step"
         run: |
           set -euo pipefail
           echo "which sops: $(which sops)"
