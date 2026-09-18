@@ -1,0 +1,37 @@
+name: Verify setup-sops-age
+
+# Throwaway verification: confirms sm-steel/setup-sops-age, pinned by its
+# v0.1.0 commit SHA, can be pulled from GHCR with ONLY the default
+# GITHUB_TOKEN (no login step, no PAT -- this repo has no relation to
+# sm-steel/setup-sops-age at all, which is the actual property "public
+# repo" is meant to buy), and that sops/age/age-keygen land on PATH for a
+# later plain run: step in the SAME job.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup sops + age (no login/auth step of any kind)
+        uses: sm-steel/setup-sops-age@675b80fa59ff1d9b8bfe5e7a3ed42bdecdc39903 # v0.1.0
+
+      - name: Confirm sops/age/age-keygen are on PATH in a plain run: step
+        run: |
+          set -euo pipefail
+          echo "which sops: $(which sops)"
+          echo "which age: $(which age)"
+          echo "which age-keygen: $(which age-keygen)"
+          sops --version --disable-version-check
+          age --version
+          age-keygen --version
+
+          # Exercise them for real, not just --version.
+          age-keygen -o /tmp/key.txt
+          echo "hello from setup-sops-age verification" | age -r "$(grep -o 'age1[a-z0-9]*' /tmp/key.txt)" -o /tmp/secret.age
+          age -d -i /tmp/key.txt /tmp/secret.age
